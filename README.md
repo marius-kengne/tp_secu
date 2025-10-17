@@ -25,3 +25,7 @@ sudo iptables -A FORWARD -j DROP
 # 8) NAT (inchangé)
 sudo iptables -t nat -F POSTROUTING
 sudo iptables -t nat -A POSTROUTING -o enp0s3 -s 192.168.56.0/24 -j MASQUERADE
+
+#test
+sudo iptables -L FORWARD -n -v --line-numbers
+sudo iptables -t nat -L POSTROUTING -n -v
