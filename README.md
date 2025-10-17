@@ -1,52 +1,33 @@
-# 1. Activer le routage IP (indispensable)
+# 0) Routage activé
 sudo sysctl -w net.ipv4.ip_forward=1
 
-# 2. Nettoyer les anciennes règles FORWARD
+# 1) Remise à zéro FORWARD
 sudo iptables -F FORWARD
-
-# 3. Définir la politique par défaut sur DROP
 sudo iptables -P FORWARD DROP
 
-sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -j ACCEPT
+# 2) Autoriser d’abord les retours de connexions
+sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# HTTP / HTTPS
+# 3) Autoriser SEULEMENT les services nécessaires LAN -> WAN
 sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p tcp --dport 80  -j ACCEPT
 sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p tcp --dport 443 -j ACCEPT
-
-# DNS (UDP/TCP 53)
 sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p udp --dport 53 -j ACCEPT
 sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p tcp --dport 53 -j ACCEPT
 
+# 4) ICMP: autoriser LAN -> WAN, bloquer WAN -> LAN
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p icmp -j ACCEPT
+sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -p icmp -j DROP
 
-
-sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
-
-sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -m conntrack --ctstate NEW -j DROP
-
+# 5) Anti-spoof: empêcher des sources LAN vues côté WAN
 sudo iptables -A FORWARD -i enp0s3 -s 192.168.56.0/24 -j DROP
 
+# 6) Bloquer les paquets NEW non sollicités venant du WAN vers le LAN
+sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -m conntrack --ctstate NEW -j DROP
 
+# 7) Fin de chaîne: LOG puis DROP (catch-all)
 sudo iptables -A FORWARD -j LOG --log-prefix "IPT FORWARD DROP: " --log-level 4
 sudo iptables -A FORWARD -j DROP
 
-
-
-# Autoriser ICMP depuis LAN → WAN (diagnostic)
-sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -s 192.168.56.0/24 -p icmp -j ACCEPT
-
-# Bloquer ICMP depuis WAN → LAN (reconnaissance)
-sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -p icmp -j DROP
-
-
-
+# 8) NAT (inchangé)
+sudo iptables -t nat -F POSTROUTING
 sudo iptables -t nat -A POSTROUTING -o enp0s3 -s 192.168.56.0/24 -j MASQUERADE
-
-
-sudo iptables -L FORWARD -n -v
-
-
-sudo iptables -t nat -L POSTROUTING -n -v
-
-
-cat /proc/sys/net/ipv4/ip_forward
