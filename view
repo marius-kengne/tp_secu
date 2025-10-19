@@ -1,0 +1,357 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const HarxenApp());
+
+class HarxenApp extends StatelessWidget {
+  const HarxenApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Harxen Labs',
+      theme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFEFF4FF), // fond clair moderne
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          hintStyle: TextStyle(color: Colors.black.withOpacity(.5)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(color: Colors.grey.withOpacity(.3)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: Color(0xFF6C8DFF), width: 1.5),
+          ),
+        ),
+      ),
+      home: const RegisterPage(),
+    );
+  }
+}
+
+/// Dégradé Harxen (bleu → violet)
+const harxenGradient = LinearGradient(
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+  colors: [Color(0xFF6CC8FF), Color(0xFF9B6CFF)],
+);
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _pwdCtrl = TextEditingController();
+  bool _hide = true;
+  bool _loading = false;
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _emailCtrl.dispose();
+    _pwdCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _loading = true);
+    await Future.delayed(const Duration(milliseconds: 900));
+    setState(() => _loading = false);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Compte créé (démo)')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // ===== GRAND DÉGRADÉ DE FOND =====
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFEBF4FF),
+                    Color(0xFFE6E9FF),
+                    Color(0xFFE4E5FF),
+                  ],
+                ),
+              ),
+            ),
+
+            // ===== HALOS BLEU/VIOLET =====
+            Positioned(
+              top: -h * 0.15,
+              left: -w * 0.3,
+              child: Container(
+                width: w * 1.2,
+                height: h * 0.45,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [Color(0xFFB6E1FF), Colors.transparent],
+                    radius: 0.9,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -h * 0.1,
+              right: -w * 0.3,
+              child: Container(
+                width: w * 1.2,
+                height: h * 0.4,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [Color(0xFFD8C2FF), Colors.transparent],
+                    radius: 0.9,
+                  ),
+                ),
+              ),
+            ),
+
+            // ===== CONTENU =====
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  const SizedBox(height: 80),
+
+                  // --- HEADER LOGO ---
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blueAccent.withOpacity(0.3),
+                              blurRadius: 16,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.asset('assets/images/harxen_logo.png', fit: BoxFit.cover),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'HARXEN LABS',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF202744),
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // --- FORMULAIRE ---
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(24, 30, 24, 30),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Create Account',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF202744),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Container(
+                              width: 70,
+                              height: 5,
+                              decoration: const BoxDecoration(
+                                gradient: harxenGradient,
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                            const SizedBox(height: 26),
+
+                            TextFormField(
+                              controller: _nameCtrl,
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(hintText: 'Your name'),
+                              validator: (v) =>
+                              (v == null || v.trim().isEmpty) ? 'Name required' : null,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _emailCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(hintText: 'email@domain.com'),
+                              validator: (v) {
+                                final ok =
+                                RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(v ?? '');
+                                return ok ? null : 'Invalid email';
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _pwdCtrl,
+                              obscureText: _hide,
+                              decoration: InputDecoration(
+                                hintText: 'Password',
+                                suffixIcon: IconButton(
+                                  onPressed: () => setState(() => _hide = !_hide),
+                                  icon: Icon(
+                                    _hide ? Icons.visibility_off : Icons.visibility,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ),
+                              validator: (v) =>
+                              (v != null && v.length >= 6) ? null : 'Min 6 chars',
+                            ),
+                            const SizedBox(height: 28),
+
+                            // --- Bouton principal ---
+                            DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: harxenGradient,
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blueAccent.withOpacity(0.3),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: ElevatedButton.icon(
+                                onPressed: _loading ? null : _submit,
+                                icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                                label: Text(
+                                  _loading ? 'Please wait…' : 'Sign Up',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  minimumSize: const Size.fromHeight(52),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 18),
+
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                'Already have an account? Sign In',
+                                style: TextStyle(
+                                  color: Color(0xFF4C4C6C),
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 60),
+
+                  // --- FOOTER GRADIENT + BULLes ---
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: w * 0.7,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          gradient: harxenGradient,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
+                      Positioned(
+                        left: 40,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF6CC8FF),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 40,
+                        child: Container(
+                          width: 16,
+                          height: 16,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF9B6CFF),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
