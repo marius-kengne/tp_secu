@@ -27,3 +27,14 @@ sudo iptables -t nat -A PREROUTING -i enp0s3 -p tcp --dport 443 -j DNAT --to-des
 
 sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -p tcp --dport 443 -d 192.168.10.2 -j ACCEPT
 sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -p tcp --sport 443 -s 192.168.10.2 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+
+
+***** question
+
+sudo iptables -A INPUT -i enp0s8 -p tcp --dport 443 -m state --state NEW -m hashlimit --hashlimit 10/minute --hashlimit-burst 10 --hashlimit-mode srcip,dstport --hashlimit-name https_limit -j ACCEPT
+sudo iptables -A INPUT -i enp0s8 -p tcp --dport 443 -j DROP
+
+for i in {1..15}; do curl -sk https://192.168.10.1 & done
+
