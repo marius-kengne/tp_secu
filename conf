@@ -41,3 +41,43 @@ for i in {1..15}; do curl -sk https://192.168.10.1 & done
 
 ****7
 sudo iptables -I INPUT 1 -i enp0s8 -p tcp --dport 443 -s 192.168.10.2 -m time --timestart 20:00 --timestop 08:00 --kerneltz -j DROP
+
+
+
+
+8
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -p udp --dport 53 -j ACCEPT
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -p tcp --dport 53 -j ACCEPT
+sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+9
+sudo iptables -A INPUT -i enp0s8 -m string --string "malicious" --algo bm -j DROP
+
+
+10
+sudo iptables -L -n -v
+sudo iptables -t nat -L -n -v
+
+
+
+11
+# NAT masquage (traduction d’adresse)
+sudo iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+
+# Autoriser les flux LAN -> Internet et retours
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -j ACCEPT
+sudo iptables -A FORWARD -i enp0s3 -o enp0s8 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+
+question12
+
+client
+sudo ip addr add 192.168.10.100/24 dev enp0s8
+sudo ip addr del 192.168.10.2/24 dev enp0s8
+
+
+serveur
+sudo iptables -A INPUT -s 192.168.1.100 -j DROP
+
