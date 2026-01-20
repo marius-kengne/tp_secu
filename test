@@ -70,3 +70,26 @@ num  target     prot opt source               destination
 2    ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
 3    ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
 vm2@vm2-VirtualBox:~/Desktop$ 
+
+
+
+question 8
+
+sudo iptables -A INPUT -i enp0s8 -p tcp --dport 443 -m state --state NEW -j ACCEPT
+sudo iptables -A INPUT -i enp0s3 -p tcp --dport 443 -m state --state NEW -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --dport 80 -j DROP
+
+# Autoriser HTTPS du LAN vers Internet
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -p tcp --dport 443 -j ACCEPT
+
+# Bloquer tout le reste du LAN vers Internet
+sudo iptables -A FORWARD -i enp0s8 -o enp0s3 -j DROP
+
+curl -I https://www.google.com   # doit marcher ✅
+curl -I http://example.com       # doit échouer ❌
+
+sudo iptables -A INPUT -i enp0s3 -p tcp --dport 443 -m state --state NEW -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j DROP
+
+curl -vk https://10.0.2.15
