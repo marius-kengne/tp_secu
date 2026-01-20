@@ -131,3 +131,33 @@ Chain POSTROUTING (policy ACCEPT 526 packets, 40995 bytes)
   608  113K MASQUERADE  all  --  *      enp0s3  0.0.0.0/0            0.0.0.0/0           
 vm2@vm2-VirtualBox:~/Desktop$ 
 
+
+
+##### question 9
+
+sudo iptables -A INPUT -j LOG --log-prefix "FIREWALL_DROP_IN: " --log-level 4
+sudo iptables -L INPUT -n –v
+
+sudo apt install iptables-persistent –y
+sudo netfilter-persistent save
+sudo cat /etc/iptables/rules.v4
+
+sudo reboot
+
+sudo iptables -L -n -v
+sudo iptables -t nat -L -n -v
+
+on client :
+ping -c 3 8.8.8.8
+curl -I https://www.google.com
+
+
+On client :
+curl -vk https://192.168.10.1
+on server :
+
+curl -vk https://10.0.2.15
+
+verif finale :
+sudo iptables -L -n -v
+sudo iptables -t nat -L -n -v
