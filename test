@@ -56,3 +56,17 @@ sudo iptables -L FORWARD --line-numbers
 
 sudo iptables -D INPUT 2
 
+vm2@vm2-VirtualBox:~/Desktop$ sudo iptables -L INPUT --line-numbers
+Chain INPUT (policy DROP)
+num  target     prot opt source               destination         
+1    ACCEPT     all  --  anywhere             anywhere            
+2    ACCEPT     all  --  anywhere             anywhere            
+3    ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
+4    ACCEPT     icmp --  anywhere             anywhere            
+vm2@vm2-VirtualBox:~/Desktop$ sudo iptables -L FORWARD --line-numbers
+Chain FORWARD (policy DROP)
+num  target     prot opt source               destination         
+1    ACCEPT     all  --  anywhere             anywhere            
+2    ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
+3    ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
+vm2@vm2-VirtualBox:~/Desktop$ 
