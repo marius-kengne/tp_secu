@@ -93,3 +93,41 @@ sudo iptables -A INPUT -i enp0s3 -p tcp --dport 443 -m state --state NEW -j ACCE
 sudo iptables -A INPUT -p tcp --dport 80 -j DROP
 
 curl -vk https://10.0.2.15
+
+-----------------  resultqt 
+vm2@vm2-VirtualBox:~/Desktop$ sudo iptables -L -n -v
+Chain INPUT (policy DROP 164 packets, 13038 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  534  102K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+ 2071 1104K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  enp0s8 *       0.0.0.0/0            0.0.0.0/0           
+    1    60 ACCEPT     tcp  --  enp0s8 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 state NEW
+    0     0 ACCEPT     tcp  --  enp0s3 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 state NEW
+   45  2700 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  enp0s3 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 state NEW
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 2774  485K ACCEPT     all  --  enp0s8 enp0s3  0.0.0.0/0            0.0.0.0/0           
+ 3071 8858K ACCEPT     all  --  enp0s3 enp0s8  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  enp0s8 enp0s3  0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+    0     0 DROP       all  --  enp0s8 enp0s3  0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 2239 packets, 675K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+vm2@vm2-VirtualBox:~/Desktop$ sudo iptables -t nat -L -n -v
+Chain PREROUTING (policy ACCEPT 316 packets, 46297 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT (policy ACCEPT 11 packets, 886 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 1568 packets, 342K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 526 packets, 40995 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  608  113K MASQUERADE  all  --  *      enp0s3  0.0.0.0/0            0.0.0.0/0           
+vm2@vm2-VirtualBox:~/Desktop$ 
+
