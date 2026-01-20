@@ -48,3 +48,11 @@ vm2@vm2-VirtualBox:~/Desktop$
 
 
 sudo iptables -L -n -v
+
+
+
+sudo iptables -L INPUT --line-numbers
+sudo iptables -L FORWARD --line-numbers
+
+sudo iptables -D INPUT 2
+
