@@ -24,4 +24,27 @@ sudo iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
 sudo iptables -A INPUT -i enp0s8 -p icmp -j ACCEPT
 
 
+
+resultat
+
+m2@vm2-VirtualBox:~/Desktop$ sudo iptables -L -n -v
+Chain INPUT (policy DROP 161 packets, 12819 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   34  4398 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+   46 26942 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  enp0s8 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 1439  111K ACCEPT     all  --  enp0s8 enp0s3  0.0.0.0/0            0.0.0.0/0           
+ 1198 7439K ACCEPT     all  --  enp0s3 enp0s8  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+
+Chain OUTPUT (policy ACCEPT 160 packets, 21648 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+vm2@vm2-VirtualBox:~/Desktop$ 
+
+
+
 sudo iptables -L -n -v
