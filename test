@@ -7,3 +7,21 @@ sudo iptables -t nat -L -n -v
 sudo iptables -L FORWARD -n -v
 ping -c 3 8.8.8.8
 curl -I https://www.google.com
+
+
+question : 8
+
+
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+sudo iptables -A INPUT -i enp0s8 -p icmp -j ACCEPT
+
+
+sudo iptables -L -n -v
