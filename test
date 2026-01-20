@@ -245,3 +245,12 @@ Chain POSTROUTING (policy ACCEPT 84 packets, 6966 bytes)
  pkts bytes target     prot opt in     out     source               destination         
   129 15172 MASQUERADE  all  --  *      enp0s3  0.0.0.0/0            0.0.0.0/0           
 vm2@vm2-VirtualBox:~/Desktop$
+
+
+
+
+on client
+curl http://192.168.10.1
+on server
+sudo tail -n 20 /var/log/syslog | grep "FIREWALL_DROP_IN"
+
