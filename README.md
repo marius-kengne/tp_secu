@@ -1,5 +1,38 @@
 git config --global alias.lg "log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset'"
 
+
+
+TEAM'S APM
+
+COMPONENT STATUS:
+
+  📊 Automated Tests (Jira):
+    - ✅ APE        : OK
+    - ✅ GTU        : OK
+    - ❌ MTB        : 17 failed test(s)
+    - ✅ NAP        : OK
+    - ✅ AGT        : OK
+
+  🔧 Database Backup : Jobs KO:
+    - ✅ No failed jobs
+
+  🎫 Incident Statistics (EasyVista):
+    - To be handled : 1
+    - In progress   : 1
+
+  📈 SLI Data (OTIS):
+    - ✅ APE        : 100.00 %
+    - ✅ GTU        : 100.00 %
+    - ✅ MTB        : 100.00 %
+    - ✅ NAP        : 100.00 %
+    - ✅ AGT        : 100.00 %
+
+
+
+
+
+
+
 sudo sysctl -w net.ipv4.ip_forward=1
 
 sudo iptables -F FORWARD
