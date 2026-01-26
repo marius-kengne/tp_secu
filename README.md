@@ -2,30 +2,125 @@ git config --global alias.lg "log --graph --abbrev-commit --pretty=format:'%Cred
 
 
 
-TEAM'S APM
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "TEAM'S APM",
+      "weight": "Bolder",
+      "size": "Large"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Component Status",
+     TextBlock",
+      "text": "🧪 Automated Tests (Jira)",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "APE" },
+            { "type": "TextBlock", "text": "GTU" },
+            { "type": "TextBlock", "text": "MTB" },
+           AGT" }
+          ]
+        },
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "🟢 OK" },
+            { "type": "TextBlock", "text": "🟢 OK" },
+            { "type": "TextBlock", "text": "❌ 17 failed test(s)" },
+            { "type": "TextBlock", "text": "🟢 OK" },
+            { "type": "TextBlock", "text": "🟢 OK" }
+          ]
+        }
+      ]
+    },
 
-COMPONENT STATUS:
+    {
+      "type": "TextBlock",
+      "text": "🗄️ Database Backup : Jobs KO",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "TextBlock",
+      "text": "🟢 No failed jobs",
+      "spacing": "Small"
+    },
 
-  📊 Automated Tests (Jira):
-    - ✅ APE        : OK
-    - ✅ GTU        : OK
-    - ❌ MTB        : 17 failed test(s)
-    - ✅ NAP        : OK
-    - ✅ AGT        : OK
+    {
+      "type": "TextBlock",
+      "text": "📘 Incident Statistics (EasyVista)",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "To be handled" },
+            { "type": "TextBlock", "text": "In progress" }
+          ]
+        },
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "1" },
+            { "type": "TextBlock", "text": "1" }
+          ]
+        }
+      ]
+    },
 
-  🔧 Database Backup : Jobs KO:
-    - ✅ No failed jobs
-
-  🎫 Incident Statistics (EasyVista):
-    - To be handled : 1
-    - In progress   : 1
-
-  📈 SLI Data (OTIS):
-    - ✅ APE        : 100.00 %
-    - ✅ GTU        : 100.00 %
-    - ✅ MTB        : 100.00 %
-    - ✅ NAP        : 100.00 %
-    - ✅ AGT        : 100.00 %
+    {
+      "type": "TextBlock",
+      "text": "📊 SLI Data (OTIS)",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "APE" },
+            { "type": "TextBlock", "text": "GTU" },
+            { "type": "TextBlock", "text": "MTB" },
+            { "type": "TextBlock", "text": "NAP" },
+            { "type": "TextBlock", "text": "AGT" }
+          ]
+        },
+        {
+          "type": "Column",
+          "items": [
+            { "type": "TextBlock", "text": "🟢 100.00%" },
+            { "type": "TextBlock", "text": "🟢 100.00%" },
+            { "type": "TextBlock", "text": "🟢 100.00%" },
+            { "type": "TextBlock", "text": "🟢 100.00%" },
+            { "type": "TextBlock", "text": "🟢 100.00%" }
+          ]
+        }
+      ]
+    }
+  ]
+}
 
 
 
