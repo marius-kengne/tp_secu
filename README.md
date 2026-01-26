@@ -1,3 +1,4 @@
+git config --global alias.lg "log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset'"
 
 sudo sysctl -w net.ipv4.ip_forward=1
 
